@@ -84,7 +84,7 @@ bot.on("location", async (msg) => {
           [
             {
               text: `Меню`,
-              web_app: { url: "https://collagen-pmt.ru/" },
+              web_app: { url: "https://collagensitebot.netlify.app/" },
             },
           ],
         ],
