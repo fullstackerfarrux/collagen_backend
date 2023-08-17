@@ -29,7 +29,6 @@ bot.onText(/start/, async (msg) => {
 });
 
 bot.on("contact", async (msg) => {
-  console.log(msg);
   const find = await client.query(
     "select * from users where phone_number = $1",
     [msg.contact.phone_number]
@@ -84,7 +83,7 @@ bot.on("location", async (msg) => {
           [
             {
               text: `Меню`,
-              web_app: { url: "https://collagensitebot.netlify.app/" },
+              web_app: { url: "https://www.collagenbot.uz/" },
             },
           ],
         ],
