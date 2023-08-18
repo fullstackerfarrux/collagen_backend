@@ -141,8 +141,8 @@ bot.on("message", async (msg) => {
            Товары в корзине: ${data.order_products.map((i) => {
              let text = ` %0A      - ${i.product_name} x${i.count} (${
                i.sale_price !== null
-                 ? +i.sale_price.toLocaleString()
-                 : +i.price.toLocaleString()
+                 ? i.sale_price.toString().toLocaleString()
+                 : i.price.toString().toLocaleString()
              })`;
              return text;
            })} %0A
