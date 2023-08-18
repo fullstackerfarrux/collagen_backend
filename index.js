@@ -38,7 +38,6 @@ bot.on("contact", async (msg) => {
   console.log(find);
 
   if (find.rowCount == 0) {
-    console.log("res", find.rows);
     const create = await client.query(
       "INSERT INTO users(user_id, username, firstname, phone_number) values($1, $2, $3, $4)",
       [
@@ -56,7 +55,6 @@ bot.on("contact", async (msg) => {
       }),
     });
   } else {
-    console.log("qoshmadi", find.rows);
     bot.sendMessage(msg.chat.id, `Пожалуйста отправьте геопозицию`, {
       reply_markup: JSON.stringify({
         keyboard: [[{ text: "Отправить геопозицию", request_location: true }]],
@@ -113,8 +111,6 @@ bot.on("message", async (msg) => {
             count: product.count,
           };
         });
-
-        console.log("resProduct", resProduct);
 
         let user = await client.query(
           "SELECT * FROM users where user_id = $1",
