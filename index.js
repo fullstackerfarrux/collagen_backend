@@ -145,7 +145,7 @@ bot.on("message", async (msg) => {
            })}</b> %0A
           %0A
           <b>Информация об оплате (наличные)</b> %0A
-          <b>Подытог: ${data.total.toLocaleNumber() - 19000} сум</b> %0A
+          <b>Подытог: ${data.total} сум</b> %0A
           <b>Доставка: 19 000 сум</b> %0A
           <b>Скидка: ${
             data.discount !== undefined ? data.discount : "0"
