@@ -30,6 +30,7 @@ create table orders(
     count serial unique,
     order_id VARCHAR DEFAULT gen_random_uuid(),
     phone_number VARCHAR NOT NULL,
+    total VARCHAR NOT NULL,
     products VARCHAR[] NOT NULL
 );
 

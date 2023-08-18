@@ -101,15 +101,27 @@ bot.on("message", async (msg) => {
     try {
       const data = JSON.parse(msg.web_app_data.data);
       if (msg.web_app_data.data.length >= 0) {
-        console.log(data);
+        let resProduct = data.order_products.map((product) => {
+          return {
+            product_name: product.title,
+            product_price:
+              product.sale_price !== null ? product.sale_price : product.price,
+            count: product.count,
+          };
+        });
+
+        console.log("resProduct", resProduct);
+
         let user = await client.query(
           "SELECT * FROM users where user_id = $1",
           [msg.from.id]
         );
 
+        console.log(user);
+
         // let create = await client.query(
-        //   "INSERT INTO orders(products, total, ) values($1, $2, $3, $4)",
-        //   [data, total, created_date, get.rows[0].tg_name]
+        //   "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
+        //   [resProduct, `${data.total}`,]
         // );
       }
     } catch (error) {
