@@ -142,9 +142,8 @@ bot.on("message", async (msg) => {
              return text;
            })} %0A
           %0A
-          Информация об оплате (наличные) %0A
-          Тип доставки: ${data.delivery} %0A
-          Тип оплаты: ${data.payment} %0A
+          Информация об оплате (${data.payment}) %0A
+          Тип выдачи: ${data.delivery} %0A
           Подытог: ${total.toLocaleString()} сум %0A
           Доставка: 19 000 сум %0A
           Скидка: ${data.discount !== undefined ? data.discount : "0"} сум %0A
