@@ -124,7 +124,7 @@ bot.on("message", async (msg) => {
 
         const token = process.env.TelegramApi;
         const chat_id = process.env.CHAT_ID;
-        const message = ` <b>Заявка с бота!</b> %0A
+        const message = `Заявка с бота! %0A
            <b>Заказ номер: ${getCount.rows[0].max}</b> %0A
            <b>Имя пользователя: ${user.rows[0].username}</b> %0A
            <b>Адрес: ${user.rows[0].user_location[0]}, ${
@@ -139,9 +139,11 @@ bot.on("message", async (msg) => {
            })}</b> %0A
           %0A
           <b>Информация об оплате (наличные)</b> %0A
-          <b>Подытог: ${data.total - 19000} сум</b> %0A
+          <b>Подытог: ${data.total.toLocaleNumber() - 19000} сум</b> %0A
           <b>Доставка: 19 000 сум</b> %0A
-          <b>Скидка: ${data.discount} сум</b> %0A
+          <b>Скидка: ${
+            data.discount !== undefined ? data.discount : "0"
+          } сум</b> %0A
           <b>Итого: ${data.total} сум</b> %0A
         `;
 
