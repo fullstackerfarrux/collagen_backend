@@ -115,14 +115,15 @@ bot.on("message", async (msg) => {
           "SELECT * FROM users where user_id = $1",
           [msg.from.id]
         );
+
         console.log(user.rows[0]);
 
-        let create = await client.query(
-          "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
-          [resProduct, `${data.total}`, user.rows[0].phone_number]
-        );
+        // let create = await client.query(
+        //   "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
+        //   [resProduct, `${data.total}`, user.rows[0].phone_number]
+        // );
 
-        let getCount = await client.query("SELECT MAX(count) FROM orders");
+        // let getCount = await client.query("SELECT MAX(count) FROM orders");
 
         const token = process.env.TelegramApi;
         const chat_id = process.env.CHAT_ID;
