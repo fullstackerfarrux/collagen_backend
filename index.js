@@ -93,6 +93,12 @@ bot.on("location", async (msg) => {
   );
 });
 
+bot.on("message", async (msg) => {
+  if (msg.web_app_data?.data) {
+    console.log(msg.web_app_data?.data);
+  }
+});
+
 app.use(productsRoute);
 
 app.listen(port, () => {
