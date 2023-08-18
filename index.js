@@ -117,12 +117,12 @@ bot.on("message", async (msg) => {
           [msg.from.id]
         );
 
-        console.log(user);
+        console.log(user.rows[0].phone_number);
 
-        // let create = await client.query(
-        //   "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
-        //   [resProduct, `${data.total}`,]
-        // );
+        let create = await client.query(
+          "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
+          [resProduct, `${data.total}`, user.rows[0].phone_number]
+        );
       }
     } catch (error) {
       console.log("error ->", error);
