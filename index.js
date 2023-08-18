@@ -35,33 +35,35 @@ bot.on("contact", async (msg) => {
     [msg.contact.phone_number]
   );
 
-  if (find.rows == undefined || find.rows == []) {
-    console.log("res", find.rows);
-    const create = await client.query(
-      "INSERT INTO users(user_id, username, firstname, phone_number) values($1, $2, $3, $4)",
-      [
-        msg.from.id,
-        msg.chat.username,
-        msg.contact.first_name,
-        msg.contact.phone_number,
-      ]
-    );
+  console.log(find);
 
-    bot.sendMessage(msg.chat.id, `Пожалуйста отправьте геопозицию`, {
-      reply_markup: JSON.stringify({
-        keyboard: [[{ text: "Отправить геопозицию", request_location: true }]],
-        resize_keyboard: true,
-      }),
-    });
-  } else {
-    console.log("qoshmadi", find.rows);
-    bot.sendMessage(msg.chat.id, `Пожалуйста отправьте геопозицию`, {
-      reply_markup: JSON.stringify({
-        keyboard: [[{ text: "Отправить геопозицию", request_location: true }]],
-        resize_keyboard: true,
-      }),
-    });
-  }
+  // if (find.rows == undefined || find.rows == []) {
+  //   console.log("res", find.rows);
+  //   const create = await client.query(
+  //     "INSERT INTO users(user_id, username, firstname, phone_number) values($1, $2, $3, $4)",
+  //     [
+  //       msg.from.id,
+  //       msg.chat.username,
+  //       msg.contact.first_name,
+  //       msg.contact.phone_number,
+  //     ]
+  //   );
+
+  //   bot.sendMessage(msg.chat.id, `Пожалуйста отправьте геопозицию`, {
+  //     reply_markup: JSON.stringify({
+  //       keyboard: [[{ text: "Отправить геопозицию", request_location: true }]],
+  //       resize_keyboard: true,
+  //     }),
+  //   });
+  // } else {
+  //   console.log("qoshmadi", find.rows);
+  //   bot.sendMessage(msg.chat.id, `Пожалуйста отправьте геопозицию`, {
+  //     reply_markup: JSON.stringify({
+  //       keyboard: [[{ text: "Отправить геопозицию", request_location: true }]],
+  //       resize_keyboard: true,
+  //     }),
+  //   });
+  // }
 });
 
 bot.on("location", async (msg) => {
