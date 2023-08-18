@@ -122,7 +122,7 @@ bot.on("message", async (msg) => {
           [resProduct, `${data.total}`, user.rows[0].phone_number]
         );
 
-        let getCount = await client.query("SELECT MAX(count) FROM order");
+        let getCount = await client.query("SELECT MAX(count) FROM orders");
 
         console.log(getCount);
       }
