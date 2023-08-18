@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import TelegramBot from "node-telegram-bot-api";
 import client from "./db/config.js";
 import productsRoute from "./Router/products.route.js";
+import axios from "axios";
 
 const app = express();
 app.use(cors());
