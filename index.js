@@ -168,7 +168,12 @@ bot.on("message", async (msg) => {
           {
             reply_markup: JSON.stringify({
               keyboard: [
-                [{ text: "Создать новый заказ", request_location: true }],
+                [
+                  {
+                    text: "Создать новый заказ (Отправить геопозицию)",
+                    request_location: true,
+                  },
+                ],
               ],
               resize_keyboard: true,
             }),
