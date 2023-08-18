@@ -36,6 +36,7 @@ bot.on("contact", async (msg) => {
   );
 
   if (find.rows == undefined) {
+    console.log("res", find.rows);
     const create = await client.query(
       "INSERT INTO users(user_id, username, firstname, phone_number) values($1, $2, $3, $4)",
       [
@@ -53,6 +54,7 @@ bot.on("contact", async (msg) => {
       }),
     });
   } else {
+    console.log("qoshmadi", find.rows);
     bot.sendMessage(msg.chat.id, `Пожалуйста отправьте геопозицию`, {
       reply_markup: JSON.stringify({
         keyboard: [[{ text: "Отправить геопозицию", request_location: true }]],
@@ -103,7 +105,7 @@ bot.on("message", async (msg) => {
       if (msg.web_app_data.data.length >= 0) {
         let resProduct = data.order_products.map((product) => {
           return {
-            product_name: product.title,
+            product_name: product.product_name,
             product_price:
               product.sale_price !== null ? product.sale_price : product.price,
             count: product.count,
