@@ -123,7 +123,10 @@ bot.on("message", async (msg) => {
         let getCount = await client.query("SELECT MAX(count) FROM orders");
         let total = 0;
         data.order_products.map((i) => {
-          total += i.sale_price !== null ? i.sale_price : i.price;
+          total +=
+            i.sale_price !== null
+              ? i.sale_price * +i.count
+              : i.price * +i.count;
         });
 
         const token = process.env.TelegramApi;
@@ -136,7 +139,7 @@ bot.on("message", async (msg) => {
         } (Локация после сообщения) %0A
            Номер телефона: +${user.rows[0].phone_number} %0A
            Товары в корзине: ${data.order_products.map((i) => {
-             let text = ` %0A      - ${i.product_name} x ${i.count} (${
+             let text = ` %0A      - ${i.product_name} x${i.count} (${
                i.sale_price !== null ? i.sale_price : i.price
              })`;
              return text;
