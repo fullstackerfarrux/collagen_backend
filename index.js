@@ -121,6 +121,12 @@ bot.on("message", async (msg) => {
         );
 
         let getCount = await client.query("SELECT MAX(count) FROM orders");
+        let total = 0;
+        data.order_products.map((i) => {
+          total += i.sale_price !== null ? i.sale_price : i.price;
+        });
+
+        console.log("total", total);
 
         const token = process.env.TelegramApi;
         const chat_id = process.env.CHAT_ID;
