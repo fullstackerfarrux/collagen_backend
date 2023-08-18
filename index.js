@@ -116,7 +116,9 @@ bot.on("message", async (msg) => {
           [msg.from.id]
         );
 
-        console.log(user.rows[0]);
+        console.log(user.rows[0].user_location);
+        console.log(user.rows[0].user_location[1], "n1chisi bu");
+        console.log(user.rows[0].user_location[2], "n2chsi bu");
 
         // let create = await client.query(
         //   "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
