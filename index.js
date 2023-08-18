@@ -12,6 +12,7 @@ dotenv.config();
 
 let port = process.env.PORT || 4001;
 const bot = new TelegramBot(process.env.TelegramApi, { polling: true });
+const ChatId = process.env.ChatId;
 
 bot.onText(/start/, async (msg) => {
   bot.sendMessage(
@@ -96,6 +97,24 @@ bot.on("location", async (msg) => {
 bot.on("message", async (msg) => {
   if (msg.web_app_data?.data) {
     console.log(msg.web_app_data?.data);
+
+    try {
+      const data = JSON.parse(msg.web_app_data.data);
+      if (msg.web_app_data.data.length >= 0) {
+        console.log(data);
+        let user = await client.query(
+          "SELECT * FROM users where user_id = $1",
+          [msg.from.id]
+        );
+
+        // let create = await client.query(
+        //   "INSERT INTO orders(products, total, ) values($1, $2, $3, $4)",
+        //   [data, total, created_date, get.rows[0].tg_name]
+        // );
+      }
+    } catch (error) {
+      console.log("error ->", error);
+    }
   }
 });
 
