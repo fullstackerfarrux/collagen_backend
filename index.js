@@ -126,39 +126,37 @@ bot.on("message", async (msg) => {
           total += i.sale_price !== null ? i.sale_price : i.price;
         });
 
-        console.log("total", total);
-
         const token = process.env.TelegramApi;
         const chat_id = process.env.CHAT_ID;
         const message = `Заявка с бота! %0A
-           <b>Заказ номер: ${getCount.rows[0].max}</b> %0A
-           <b>Имя пользователя: ${user.rows[0].username}</b> %0A
-           <b>Адрес: ${user.rows[0].user_location[0]}, ${
+           Заказ номер: ${getCount.rows[0].max}%0A
+           Имя пользователя: ${user.rows[0].username} %0A
+           Адрес: ${user.rows[0].user_location[0]}, ${
           user.rows[0].user_location[1]
-        } (Локация после сообщения)</b> %0A
-           <b>Номер телефона: +${user.rows[0].phone_number}</b> %0A
-           <b>Товары в корзине: ${data.order_products.map((i) => {
-             let text = `<b> %0A      - ${i.product_name} x ${i.count} (${
+        } (Локация после сообщения) %0A
+           Номер телефона: +${user.rows[0].phone_number} %0A
+           Товары в корзине: ${data.order_products.map((i) => {
+             let text = ` %0A      - ${i.product_name} x ${i.count} (${
                i.sale_price !== null ? i.sale_price : i.price
-             })</b>`;
+             })`;
              return text;
-           })}</b> %0A
+           })} %0A
           %0A
-          <b>Информация об оплате (наличные)</b> %0A
-          <b>Подытог: ${data.total} сум</b> %0A
-          <b>Доставка: 19 000 сум</b> %0A
-          <b>Скидка: ${
-            data.discount !== undefined ? data.discount : "0"
-          } сум</b> %0A
-          <b>Итого: ${data.total} сум</b> %0A
+          Информация об оплате (наличные) %0A
+          Тип доставки: ${data.delivery} %0A
+          Тип оплаты: ${data.payment} %0A
+          Подытог: ${total.toLocaleString()} сум %0A
+          Доставка: 19 000 сум %0A
+          Скидка: ${data.discount !== undefined ? data.discount : "0"} сум %0A
+          Итого: ${data.total} сум %0A
         `;
 
         await axios.post(
           `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
         );
-        // await axios.post(
-        //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${user.rows[0].user_location[0]}&longitude=${user.rows[0].user_location[1]}`
-        // );
+        await axios.post(
+          `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${user.rows[0].user_location[0]}&longitude=${user.rows[0].user_location[1]}`
+        );
       }
     } catch (error) {
       console.log("error ->", error);
