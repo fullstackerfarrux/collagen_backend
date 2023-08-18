@@ -156,6 +156,19 @@ bot.on("message", async (msg) => {
         await axios.post(
           `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${user.rows[0].user_location[0]}&longitude=${user.rows[0].user_location[1]}`
         );
+
+        await bot.sendMessage(
+          msg.chat.id,
+          `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊`,
+          {
+            reply_markup: JSON.stringify({
+              keyboard: [
+                [{ text: "Создать новый заказ", request_location: true }],
+              ],
+              resize_keyboard: true,
+            }),
+          }
+        );
       }
     } catch (error) {
       console.log("error ->", error);
