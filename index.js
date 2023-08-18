@@ -12,7 +12,6 @@ dotenv.config();
 
 let port = process.env.PORT || 4001;
 const bot = new TelegramBot(process.env.TelegramApi, { polling: true });
-const ChatId = process.env.ChatId;
 
 bot.onText(/start/, async (msg) => {
   bot.sendMessage(
@@ -116,6 +115,7 @@ bot.on("message", async (msg) => {
           "SELECT * FROM users where user_id = $1",
           [msg.from.id]
         );
+        console.log(user.rows[0]);
 
         let create = await client.query(
           "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
@@ -124,7 +124,33 @@ bot.on("message", async (msg) => {
 
         let getCount = await client.query("SELECT MAX(count) FROM orders");
 
-        console.log(getCount);
+        const token = process.env.TelegramApi;
+        const chat_id = process.env.CHAT_ID;
+        //     const message = ` <b>Заявка с бота!</b> %0A
+        //    <b>Заказ номер: ${getCount.rows[0].max}</b> %0A
+        //    <b>Имя пользователя: ${user.rows[0].username}</b> %0A
+        //    <b>Адрес: ${get.rows[0].users_location[0]}, ${
+        //       get.rows[0].users_location[1]
+        //     } (Локация после сообщения)</b> %0A
+        //    <b>Номер телефона: +${get.rows[0].phone_number}</b> %0A
+        //    <b>Товары в корзине: ${data.order_products.map((i) => {
+        //      let text = `<b> %0A      - ${i.product_name} x ${i.product_quant} (${i.product_price})</b>`;
+        //      return text;
+        //    })}</b> %0A
+        //   %0A
+        //   <b>Информация об оплате (наличные)</b> %0A
+        //   <b>Подытог: ${data.total - 15000} сум</b> %0A
+        //   <b>Доставка: 15 000 сум</b> %0A
+        //   <b>Скидка: ${data.discount == undefined ? "0" : data.discount} сум</b> %0A
+        //   <b>Итого: ${data.total} сум</b> %0A
+        // `;
+
+        // await axios.post(
+        //   `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&parse_mode=html&text=${message}`
+        // );
+        // await axios.post(
+        //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${userInfo.location_latitude}&longitude=${userInfo.location_longitude}`
+        // );
       }
     } catch (error) {
       console.log("error ->", error);
