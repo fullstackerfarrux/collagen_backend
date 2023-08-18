@@ -35,7 +35,7 @@ bot.on("contact", async (msg) => {
     [msg.contact.phone_number]
   );
 
-  if (find.rows == undefined) {
+  if (find.rows == undefined || find.rows == []) {
     console.log("res", find.rows);
     const create = await client.query(
       "INSERT INTO users(user_id, username, firstname, phone_number) values($1, $2, $3, $4)",
