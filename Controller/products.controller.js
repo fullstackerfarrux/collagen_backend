@@ -57,11 +57,11 @@ export const getProduct = async (req, res) => {
 export const editProduct = async (req, res) => {
   let { id, title, description, price, images, status } = req.body;
 
-  let sale = false;
+  // let sale = false;
 
-  if (discount !== undefined && discount !== "") {
-    sale = true;
-  }
+  // if (discount !== undefined && discount !== "") {
+  //   sale = true;
+  // }
 
   // sale
   //   ?
