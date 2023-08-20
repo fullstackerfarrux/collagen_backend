@@ -131,26 +131,26 @@ bot.on("message", async (msg) => {
 
         const token = process.env.TelegramApi;
         const chat_id = process.env.CHAT_ID;
-        const message = `Заявка с бота! %0A
-           Заказ номер: ${getCount.rows[0].max}%0A
-           Имя пользователя: ${user.rows[0].username} %0A
-           Адрес: ${user.rows[0].user_location[0]}, ${
+        const message = `<b>Заявка с бота!</b> %0A
+  <b>Заказ номер: </b> ${getCount.rows[0].max}%0A
+  <b>Имя пользователя:</b> ${user.rows[0].username} %0A
+  <b>Адрес:</b> ${user.rows[0].user_location[0]}, ${
           user.rows[0].user_location[1]
         } (Локация после сообщения) %0A
-           Номер телефона: +${user.rows[0].phone_number} %0A
-           Товары в корзине: ${data.order_products.map((i) => {
-             let text = ` %0A      - ${i.product_name} x${i.count} (${
-               i.sale_price !== null ? i.sale_price : i.price
-             })`;
-             return text;
-           })} %0A
+  <b>Номер телефона:</b> +${user.rows[0].phone_number} %0A
+  <b>Товары в корзине:</b> ${data.order_products.map((i) => {
+    let text = ` %0A      - ${i.product_name} x${i.count} (${
+      i.sale_price !== null ? i.sale_price : i.price
+    })`;
+    return text;
+  })} %0A
           %0A
-          Информация об оплате (${data.payment}) %0A
-          Тип выдачи: ${data.delivery} %0A
-          Подытог: ${total.toLocaleString()} сум %0A
-          Доставка: 19 000 сум %0A
-          Скидка: ${data.discount !== undefined ? data.discount : "0"} сум %0A
-          Итого: ${data.total} сум %0A
+  <b>Информация об оплате (${data.payment}) </b>%0A
+  <b>Тип выдачи:</b> ${data.delivery} %0A
+  <b>Подытог:</b> ${total.toLocaleString()} сум %0A
+  <b>Доставка:</b> 19 000 сум %0A
+  <b>Скидка:</b> ${data.discount !== undefined ? data.discount : "0"} сум %0A
+  <b>Итого:</b> ${data.total} сум %0A
         `;
 
         await axios.post(
