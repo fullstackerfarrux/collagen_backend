@@ -55,24 +55,23 @@ export const getProduct = async (req, res) => {
 };
 
 export const editProduct = async (req, res) => {
-  let { id, title, description, price, images, status } = req.body;
+  let { id, title, description, price, images, discount } = req.body;
 
-  // let sale = false;
+  let sale = false;
 
-  // if (discount !== undefined && discount !== "") {
-  //   sale = true;
-  // }
+  if (discount !== undefined && discount !== "") {
+    sale = true;
+  }
 
-  // sale
-  //   ?
-  await client.query(
-    "UPDATE product SET title = $1, description = $2, price = $3, images = $4, status = $5 WHERE product_id = $6",
-    [title, description, +price, images, status, id]
-  );
-  // : await client.query(
-  //     "UPDATE product SET title = $1, description = $2, price = $3, images = $4 WHERE product_id = $5",
-  //     [title, description, +price, images, id]
-  //   );
+  sale
+    ? await client.query(
+        "UPDATE product SET title = $1, description = $2, price = $3, images = $4, discount = $5, discount_price = $6 WHERE product_id = $7",
+        [title, description, +price, images, true, discount, id]
+      )
+    : await client.query(
+        "UPDATE product SET title = $1, description = $2, price = $3, images = $4 WHERE product_id = $5",
+        [title, description, +price, images, id]
+      );
 
   return res.status(200).json({
     msg: "Updated!",
