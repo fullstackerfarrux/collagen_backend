@@ -18,8 +18,8 @@ bot.onText(/start/, async (msg) => {
   bot.sendMessage(
     msg.chat.id,
     `Здравствуйте ${msg.chat.first_name}!
-       Добро пожаловать! Я официальный бот Collagen.
-       Здесь можно посмотреть меню и заказать на дом!`,
+  Добро пожаловать! Я официальный бот Collagen.
+  Здесь можно посмотреть меню и заказать на дом!`,
     {
       reply_markup: JSON.stringify({
         keyboard: [
@@ -50,17 +50,10 @@ bot.on("message", async (msg) => {
           };
         });
 
-        // let user = await client.query(
-        //   "SELECT * FROM users where user_id = $1",
-        //   [msg.from.id]
-        // );
-
         let create = await client.query(
           "INSERT INTO orders(products, total, user_id, comment, payment_type) values($1, $2, $3, $4, $5)",
           [resProduct, `${data.total}`, msg.from.id, data.comment, data.payment]
         );
-
-        // let getCount = await client.query("SELECT MAX(count) FROM orders");
 
         //       const token = process.env.TelegramApi;
         //       const chat_id = process.env.CHAT_ID;
@@ -159,14 +152,45 @@ bot.on("location", async (msg) => {
     [location, msg.from.id]
   );
 
+  let user = await client.query("SELECT * FROM users where user_id = $1", [
+    msg.from.id,
+  ]);
+
   const getOrder = await client.query(
     "SELECT * FROM orders WHERE user_id = $1",
     [msg.from.id]
   );
 
+  console.log(msg.from);
+
   let lastIndex = getOrder.rows.length;
 
-  console.log(getOrder.rows[lastIndex - 1]);
+  let getCount = await client.query("SELECT MAX(count) FROM orders");
+
+  // const token = process.env.TelegramApi;
+  // const chat_id = process.env.CHAT_ID;
+  // const message = `<b>Поступил заказ с Telegram бота:</b> #${
+  //   getCount.rows[0].max
+  // } %0A %0A
+  // <b>Имя пользователя:</b> ${user.rows[0].username} %0A
+  // <b>Адрес:</b> ${user.rows[0].user_location[0]}, ${
+  //   user.rows[0].user_location[1]
+  // } (Локация после сообщения) %0A
+  // <b>Номер телефона:</b> +${user.rows[0].phone_number} %0A
+  // <b>Товары в корзине:</b> ${data.order_products.map((i) => {
+  //   let text = ` %0A      - ${i.product_name} x${i.count} (${
+  //     i.sale_price !== null ? i.sale_price : i.price
+  //   })`;
+  //   return text;
+  // })} %0A
+  //         %0A
+  // <b>Информация об оплате (${data.payment}) </b>%0A
+  // <b>Тип выдачи:</b> ${data.delivery} %0A
+  // <b>Подытог:</b> ${data.undiscount} сум %0A
+  // <b>Доставка:</b> ${data.delivery == "Самовызов" ? "0" : "19 000"} сум %0A
+  // <b>Скидка:</b> ${data.discount !== undefined ? data.discount : "0"} сум %0A
+  // <b>Итого:</b> ${data.total.toLocaleString()} сум %0A
+  //       `;
 
   // bot.sendMessage(
   //   msg.chat.id,
