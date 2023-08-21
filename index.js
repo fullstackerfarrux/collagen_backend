@@ -79,13 +79,6 @@ bot.on("message", async (msg) => {
         // <b>Итого:</b> ${data.total.toLocaleString()} сум %0A
         //       `;
 
-        // await axios.post(
-        //   `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
-        // );
-        // await axios.post(
-        //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${user.rows[0].user_location[0]}&longitude=${user.rows[0].user_location[1]}`
-        // );
-
         await bot.sendMessage(
           msg.chat.id,
           `Iltimos kontaktingizni jonating`,
@@ -164,56 +157,54 @@ bot.on("location", async (msg) => {
   let lastIndex = getOrder.rows.length;
   let data = getOrder.rows[lastIndex - 1];
   let products = data.products.map((i) => JSON.parse(i));
-  console.log(data);
-  console.log("products", data.products);
-  console.log("productslar", products);
-
-  // console.log(products);
-  // console.log(products.length);
 
   let getCount = await client.query("SELECT MAX(count) FROM orders");
 
-  // const token = process.env.TelegramApi;
-  // const chat_id = process.env.CHAT_ID;
-  // const message = `<b>Поступил заказ с Telegram бота:</b> #${
-  //   getCount.rows[0].max
-  // } %0A %0A
-  // <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  // <b>Номер:</b> +${user.rows[0].phone_number} | @${msg.from.username} %0A
-  // <b>Сумма заказа:</b> ${+data.total.toLocaleString()} UZS %0A
-  // <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
-  //         %0A
-  // <b>Оплате (${data.payment}) </b>%0A
-  // <b>Тип выдачи:</b> ${data.delivery} %0A
-  // <b>Подытог:</b> ${data.undiscount} сум %0A
-  // <b>Доставка:</b> ${data.delivery == "Самовызов" ? "0" : "19 000"} сум %0A
-  // <b>Скидка:</b> ${data.discount !== undefined ? data.discount : "0"} сум %0A
-  // <b>Итого:</b> ${data.total.toLocaleString()} сум %0A
-  //       `;
+  const token = process.env.TelegramApi;
+  const chat_id = process.env.CHAT_ID;
+  const message = `<b>Поступил заказ с Telegram бота:</b> #${
+    getCount.rows[0].max
+  } %0A %0A
+  <b>Имя клиента:</b> ${msg.from.first_name} %0A
+  <b>Номер:</b> +${user.rows[0].phone_number} | @${msg.from.username} %0A
+  <b>Сумма заказа:</b> ${+data.total.toLocaleString()} UZS %0A
+  <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
+          %0A
+  <b>Оплате (${data.payment}) </b>%0A
+  <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b>
+  <b>Товары в корзине:</b> ${data.order_products.map((i, index) => {
+    let text = ` %0A ${index}. ${i.product_name} (${
+      i.sale_price !== null ? i.sale_price : i.price
+    } UZS  x${i.count})`;
+    return text;
+  })} %0A
+        `;
 
-  //         <b>Товары в корзине:</b> ${data.order_products.map((i) => {
-  //   let text = ` %0A      - ${i.product_name} x${i.count} (${
-  //     i.sale_price !== null ? i.sale_price : i.price
-  //   })`;
-  //   return text;
-  // })} %0A
-  // bot.sendMessage(
-  //   msg.chat.id,
-  //   `Отлично! Для выбора товара нажмите на кнопку "Меню"`,
-  //   {
-  //     reply_markup: JSON.stringify({
-  //       keyboard: [
-  //         [
-  //           {
-  //             text: `Меню`,
-  //             web_app: { url: "https://www.collagenbot.uz/" },
-  //           },
-  //         ],
-  //       ],
-  //       resize_keyboard: true,
-  //     }),
-  //   }
-  // );
+  await axios.post(
+    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
+  );
+  await axios.post(
+    `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
+  );
+
+  bot.sendMessage(
+    msg.chat.id,
+    `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊 %0A 
+     Для выбора товара нажмите на кнопку "Меню"`,
+    {
+      reply_markup: JSON.stringify({
+        keyboard: [
+          [
+            {
+              text: `Меню`,
+              web_app: { url: "https://www.collagenbot.uz/" },
+            },
+          ],
+        ],
+        resize_keyboard: true,
+      }),
+    }
+  );
 });
 
 app.use(productsRoute);
