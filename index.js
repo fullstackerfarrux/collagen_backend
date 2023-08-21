@@ -143,20 +143,20 @@ bot.on("location", async (msg) => {
   let getCount = await client.query("SELECT MAX(count) FROM orders");
   let number = `+${user.rows[0].phone_number}`;
 
-  console.log(number);
   const token = process.env.TelegramApi;
   const chat_id = process.env.CHAT_ID;
   const message = `<b>Поступил заказ с Telegram бота:</b> ${
     getCount.rows[0].max
   } %0A
   <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  <b>Номер:</b> ${"+" + user.rows[0].phone_number} | @${msg.from.username} %0A
+  <b>Номер:</b> ${number} | @${msg.from.username} %0A
   <b>Сумма заказа:</b> ${data.total} UZS %0A
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
   <b>Оплате (${data.payment_type}) </b>%0A
   <b>Тип выдачи:</b> ${data.exportation} %0A
   <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
+  %0A
   <b>Товары в корзине:</b> ${products.map((i, index) => {
     let text = ` %0A ${index + 1}. ${i.product_name} (${
       i.product_price
