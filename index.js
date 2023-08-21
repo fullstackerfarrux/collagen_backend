@@ -50,23 +50,25 @@ bot.on("message", async (msg) => {
           };
         });
 
+        console.log(data);
+
         let create = await client.query(
           "INSERT INTO orders(products, total, user_id, comment, payment_type) values($1, $2, $3, $4, $5)",
           [resProduct, `${data.total}`, msg.from.id, data.comment, data.payment]
         );
 
-        await bot.sendMessage(
-          msg.chat.id,
-          `Для завершение заказа отправьте контакт`,
-          {
-            reply_markup: JSON.stringify({
-              keyboard: [
-                [{ text: "Отправить контакт", request_contact: true }],
-              ],
-              resize_keyboard: true,
-            }),
-          }
-        );
+        // await bot.sendMessage(
+        //   msg.chat.id,
+        //   `Для завершение заказа отправьте контакт`,
+        //   {
+        //     reply_markup: JSON.stringify({
+        //       keyboard: [
+        //         [{ text: "Отправить контакт", request_contact: true }],
+        //       ],
+        //       resize_keyboard: true,
+        //     }),
+        //   }
+        // );
       }
     } catch (error) {
       console.log("error ->", error);
@@ -141,12 +143,12 @@ bot.on("location", async (msg) => {
     getCount.rows[0].max
   } %0A
   <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  <b>Номер:</b> +${user.rows[0].phone_number} | @${msg.from.username} %0A
-  <b>Сумма заказа:</b> ${+data.total.toLocaleString()} UZS %0A
+  <b>Номер:</b> ${"+" + user.rows[0].phone_number} | @${msg.from.username} %0A
+  <b>Сумма заказа:</b> ${(+data.total + 0).toLocaleString()} UZS %0A
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
   <b>Оплате (${data.payment}) </b>%0A
-  <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b>
+  <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b> %0A
   <b>Товары в корзине:</b> ${products.map((i, index) => {
     let text = ` %0A ${index + 1}. ${i.product_name} (${
       i.product_price
@@ -154,8 +156,6 @@ bot.on("location", async (msg) => {
     return text;
   })} %0A
         `;
-
-  console.log(message);
 
   await axios.post(
     `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
