@@ -163,9 +163,10 @@ bot.on("location", async (msg) => {
 
   let lastIndex = getOrder.rows.length;
   let data = getOrder.rows[lastIndex - 1];
-  // let products = JSON.parse(data.products);
+  let products = data.products.map((i) => JSON.parse(i));
   console.log(data);
   console.log("products", data.products);
+  console.log("productslar", products);
 
   // console.log(products);
   // console.log(products.length);
