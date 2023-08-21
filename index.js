@@ -137,7 +137,9 @@ bot.on("location", async (msg) => {
 
   const token = process.env.TelegramApi;
   const chat_id = process.env.CHAT_ID;
-  const message = `<b>Поступил заказ с Telegram бота:</b> ${getCount.rows[0].max} %0A
+  const message = `<b>Поступил заказ с Telegram бота:</b> ${
+    "#" + getCount.rows[0].max
+  } %0A
         `;
 
   //         <b>Имя клиента:</b> ${msg.from.first_name} %0A
