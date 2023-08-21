@@ -55,34 +55,9 @@ bot.on("message", async (msg) => {
           [resProduct, `${data.total}`, msg.from.id, data.comment, data.payment]
         );
 
-        //       const token = process.env.TelegramApi;
-        //       const chat_id = process.env.CHAT_ID;
-        //       const message = `<b>Заявка с бота!</b> %0A
-        // <b>Заказ номер: </b> ${getCount.rows[0].max}%0A
-        // <b>Имя пользователя:</b> ${user.rows[0].username} %0A
-        // <b>Адрес:</b> ${user.rows[0].user_location[0]}, ${
-        //         user.rows[0].user_location[1]
-        //       } (Локация после сообщения) %0A
-        // <b>Номер телефона:</b> +${user.rows[0].phone_number} %0A
-        // <b>Товары в корзине:</b> ${data.order_products.map((i) => {
-        //   let text = ` %0A      - ${i.product_name} x${i.count} (${
-        //     i.sale_price !== null ? i.sale_price : i.price
-        //   })`;
-        //   return text;
-        // })} %0A
-        //         %0A
-        // <b>Информация об оплате (${data.payment}) </b>%0A
-        // <b>Тип выдачи:</b> ${data.delivery} %0A
-        // <b>Подытог:</b> ${data.undiscount} сум %0A
-        // <b>Доставка:</b> ${data.delivery == "Самовызов" ? "0" : "19 000"} сум %0A
-        // <b>Скидка:</b> ${data.discount !== undefined ? data.discount : "0"} сум %0A
-        // <b>Итого:</b> ${data.total.toLocaleString()} сум %0A
-        //       `;
-
         await bot.sendMessage(
           msg.chat.id,
-          `Iltimos kontaktingizni jonating`,
-          // `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊`,
+          `Для завершение заказа отправьте контакт`,
           {
             reply_markup: JSON.stringify({
               keyboard: [
@@ -178,6 +153,8 @@ bot.on("location", async (msg) => {
   })} %0A
         `;
 
+  console.log(message);
+
   await axios.post(
     `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
   );
@@ -187,7 +164,7 @@ bot.on("location", async (msg) => {
 
   bot.sendMessage(
     msg.chat.id,
-    `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊 %0A 
+    `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊 
      Для выбора товара нажмите на кнопку "Меню"`,
     {
       reply_markup: JSON.stringify({
