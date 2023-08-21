@@ -29,9 +29,11 @@ drop table if exists orders;
 create table orders(
     count serial unique,
     order_id VARCHAR DEFAULT gen_random_uuid(),
-    phone_number VARCHAR NOT NULL,
+    user_id VARCHAR NOT NULL,
     total VARCHAR NOT NULL,
-    products VARCHAR[] NOT NULL
+    products VARCHAR[] NOT NULL,
+    comment VARCHAR,
+    payment_type VARCHAR NOT NUll
 );
 
 

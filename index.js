@@ -22,20 +22,101 @@ bot.onText(/start/, async (msg) => {
        Здесь можно посмотреть меню и заказать на дом!`,
     {
       reply_markup: JSON.stringify({
-        keyboard: [[{ text: "Отправить контакт", request_contact: true }]],
+        keyboard: [
+          [
+            {
+              text: `Меню`,
+              web_app: { url: "https://www.collagenbot.uz/" },
+            },
+          ],
+        ],
         resize_keyboard: true,
       }),
     }
   );
 });
 
+bot.on("message", async (msg) => {
+  if (msg.web_app_data?.data) {
+    try {
+      const data = JSON.parse(msg.web_app_data.data);
+      if (msg.web_app_data.data.length >= 0) {
+        let resProduct = data.order_products.map((product) => {
+          return {
+            product_name: product.product_name,
+            product_price:
+              product.sale_price !== null ? product.sale_price : product.price,
+            count: product.count,
+          };
+        });
+
+        // let user = await client.query(
+        //   "SELECT * FROM users where user_id = $1",
+        //   [msg.from.id]
+        // );
+
+        let create = await client.query(
+          "INSERT INTO orders(products, total, user_id, comment, payment_type) values($1, $2, $3, $4, $5)",
+          [resProduct, `${data.total}`, msg.from.id, data.comment, data.payment]
+        );
+
+        // let getCount = await client.query("SELECT MAX(count) FROM orders");
+
+        //       const token = process.env.TelegramApi;
+        //       const chat_id = process.env.CHAT_ID;
+        //       const message = `<b>Заявка с бота!</b> %0A
+        // <b>Заказ номер: </b> ${getCount.rows[0].max}%0A
+        // <b>Имя пользователя:</b> ${user.rows[0].username} %0A
+        // <b>Адрес:</b> ${user.rows[0].user_location[0]}, ${
+        //         user.rows[0].user_location[1]
+        //       } (Локация после сообщения) %0A
+        // <b>Номер телефона:</b> +${user.rows[0].phone_number} %0A
+        // <b>Товары в корзине:</b> ${data.order_products.map((i) => {
+        //   let text = ` %0A      - ${i.product_name} x${i.count} (${
+        //     i.sale_price !== null ? i.sale_price : i.price
+        //   })`;
+        //   return text;
+        // })} %0A
+        //         %0A
+        // <b>Информация об оплате (${data.payment}) </b>%0A
+        // <b>Тип выдачи:</b> ${data.delivery} %0A
+        // <b>Подытог:</b> ${data.undiscount} сум %0A
+        // <b>Доставка:</b> ${data.delivery == "Самовызов" ? "0" : "19 000"} сум %0A
+        // <b>Скидка:</b> ${data.discount !== undefined ? data.discount : "0"} сум %0A
+        // <b>Итого:</b> ${data.total.toLocaleString()} сум %0A
+        //       `;
+
+        // await axios.post(
+        //   `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
+        // );
+        // await axios.post(
+        //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${user.rows[0].user_location[0]}&longitude=${user.rows[0].user_location[1]}`
+        // );
+
+        await bot.sendMessage(
+          msg.chat.id,
+          `Iltimos kontaktingizni jonating`,
+          // `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊`,
+          {
+            reply_markup: JSON.stringify({
+              keyboard: [
+                [{ text: "Отправить контакт", request_contact: true }],
+              ],
+              resize_keyboard: true,
+            }),
+          }
+        );
+      }
+    } catch (error) {
+      console.log("error ->", error);
+    }
+  }
+});
 bot.on("contact", async (msg) => {
   const find = await client.query(
     "select * from users where phone_number = $1",
     [msg.contact.phone_number]
   );
-
-  console.log(find);
 
   if (find.rowCount == 0) {
     const create = await client.query(
@@ -94,95 +175,6 @@ bot.on("location", async (msg) => {
       }),
     }
   );
-});
-
-bot.on("message", async (msg) => {
-  if (msg.web_app_data?.data) {
-    try {
-      const data = JSON.parse(msg.web_app_data.data);
-      console.log(data);
-      if (msg.web_app_data.data.length >= 0) {
-        let resProduct = data.order_products.map((product) => {
-          return {
-            product_name: product.product_name,
-            product_price:
-              product.sale_price !== null ? product.sale_price : product.price,
-            count: product.count,
-          };
-        });
-
-        let user = await client.query(
-          "SELECT * FROM users where user_id = $1",
-          [msg.from.id]
-        );
-
-        let create = await client.query(
-          "INSERT INTO orders(products, total, phone_number) values($1, $2, $3)",
-          [resProduct, `${data.total}`, user.rows[0].phone_number]
-        );
-
-        let getCount = await client.query("SELECT MAX(count) FROM orders");
-        let total = 0;
-        data.order_products.map((i) => {
-          total +=
-            i.sale_price !== null
-              ? i.sale_price * +i.count
-              : i.price * +i.count;
-        });
-
-        const token = process.env.TelegramApi;
-        const chat_id = process.env.CHAT_ID;
-        const message = `<b>Заявка с бота!</b> %0A
-  <b>Заказ номер: </b> ${getCount.rows[0].max}%0A
-  <b>Имя пользователя:</b> ${user.rows[0].username} %0A
-  <b>Адрес:</b> ${user.rows[0].user_location[0]}, ${
-          user.rows[0].user_location[1]
-        } (Локация после сообщения) %0A
-  <b>Номер телефона:</b> +${user.rows[0].phone_number} %0A
-  <b>Товары в корзине:</b> ${data.order_products.map((i) => {
-    let text = ` %0A      - ${i.product_name} x${i.count} (${
-      i.sale_price !== null ? i.sale_price : i.price
-    })`;
-    return text;
-  })} %0A
-          %0A
-  <b>Информация об оплате (${data.payment}) </b>%0A
-  <b>Тип выдачи:</b> ${data.delivery} %0A
-  <b>Подытог:</b> ${data.undiscount} сум %0A
-  <b>Доставка:</b> ${data.delivery == "Самовызов" ? "0" : "19 000"} сум %0A
-  <b>Скидка:</b> ${data.discount !== undefined ? data.discount : "0"} сум %0A
-  <b>Итого:</b> ${data.total.toLocaleString()} сум %0A
-        `;
-
-        await axios.post(
-          `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
-        );
-        await axios.post(
-          `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${user.rows[0].user_location[0]}&longitude=${user.rows[0].user_location[1]}`
-        );
-
-        await bot.sendMessage(
-          msg.chat.id,
-          `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊`,
-          {
-            reply_markup: JSON.stringify({
-              keyboard: [
-                [
-                  {
-                    text: "Создать новый заказ (Отправить геопозицию)",
-                    request_location: true,
-                  },
-                ],
-              ],
-              resize_keyboard: true,
-            }),
-          }
-        );
-      }
-    } catch (error) {
-      console.log("error ->", error);
-    }
-  }
 });
 
 app.use(productsRoute);
