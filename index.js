@@ -166,6 +166,7 @@ bot.on("location", async (msg) => {
   let products = JSON.parse(data.products);
 
   console.log(products);
+  console.log(products.length);
 
   let getCount = await client.query("SELECT MAX(count) FROM orders");
 
