@@ -164,7 +164,9 @@ bot.on("location", async (msg) => {
     [msg.from.id]
   );
 
-  console.log(getOrder);
+  let lastIndex = getOrder.rows.length;
+
+  console.log(getOrder.rows[lastIndex - 1]);
 
   // bot.sendMessage(
   //   msg.chat.id,
