@@ -149,7 +149,7 @@ bot.on("location", async (msg) => {
     getCount.rows[0].max
   } %0A
   <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  <b>Номер:</b> <a href="tel:+998903152006">call to client</a> | @${msg.from.username} %0A
+  <b>Номер:</b> <a href="tel:+998903152006">+998903152006</a> | @${msg.from.username} %0A
   <b>Сумма заказа:</b> ${data.total} UZS %0A
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
