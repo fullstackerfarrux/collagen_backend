@@ -163,8 +163,9 @@ bot.on("location", async (msg) => {
 
   let lastIndex = getOrder.rows.length;
   let data = getOrder.rows[lastIndex - 1];
+  let products = JSON.parse(data.products);
 
-  console.log("data", data);
+  console.log(products);
 
   let getCount = await client.query("SELECT MAX(count) FROM orders");
 
@@ -175,7 +176,7 @@ bot.on("location", async (msg) => {
   // } %0A %0A
   // <b>Имя клиента:</b> ${msg.from.first_name} %0A
   // <b>Номер:</b> +${user.rows[0].phone_number} | @${msg.from.username} %0A
-  // <b>Сумма заказа:</b> 218 000 UZS %0A
+  // <b>Сумма заказа:</b> ${+data.total.toLocaleString()} UZS %0A
   // <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
   //         %0A
   // <b>Оплате (${data.payment}) </b>%0A
