@@ -49,6 +49,7 @@ bot.on("message", async (msg) => {
             count: product.count,
           };
         });
+        let comment = data.comment !== "" ? data.comment : null;
 
         let create = await client.query(
           "INSERT INTO orders(products, total, user_id, comment, payment_type, exportation) values($1, $2, $3, $4, $5, $6)",
@@ -56,7 +57,7 @@ bot.on("message", async (msg) => {
             resProduct,
             `${data.total}`,
             msg.from.id,
-            data.comment,
+            comment,
             data.payment,
             data.delivery,
           ]
@@ -153,8 +154,8 @@ bot.on("location", async (msg) => {
   <b>Сумма заказа:</b> ${data.total} UZS %0A
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
-  <b>Оплате (${data.payment}) </b>%0A
-  <b>Тип выдачи:</b> ${data.delivery} %0A
+  <b>Оплате (${data.payment_type}) </b>%0A
+  <b>Тип выдачи:</b> ${data.exportation} %0A
   <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
   <b>Товары в корзине:</b> ${products.map((i, index) => {
     let text = ` %0A ${index + 1}. ${i.product_name} (${
