@@ -33,7 +33,8 @@ create table orders(
     total VARCHAR NOT NULL,
     products VARCHAR[] NOT NULL,
     comment VARCHAR,
-    payment_type VARCHAR NOT NUll
+    payment_type VARCHAR NOT NUll,
+    exportation VARCHAR NOT NULL
 );
 
 

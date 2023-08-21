@@ -50,25 +50,30 @@ bot.on("message", async (msg) => {
           };
         });
 
-        console.log(data);
-
         let create = await client.query(
-          "INSERT INTO orders(products, total, user_id, comment, payment_type) values($1, $2, $3, $4, $5)",
-          [resProduct, `${data.total}`, msg.from.id, data.comment, data.payment]
+          "INSERT INTO orders(products, total, user_id, comment, payment_type, exportation) values($1, $2, $3, $4, $5, $6)",
+          [
+            resProduct,
+            `${data.total}`,
+            msg.from.id,
+            data.comment,
+            data.payment,
+            data.delivery,
+          ]
         );
 
-        // await bot.sendMessage(
-        //   msg.chat.id,
-        //   `Для завершение заказа отправьте контакт`,
-        //   {
-        //     reply_markup: JSON.stringify({
-        //       keyboard: [
-        //         [{ text: "Отправить контакт", request_contact: true }],
-        //       ],
-        //       resize_keyboard: true,
-        //     }),
-        //   }
-        // );
+        await bot.sendMessage(
+          msg.chat.id,
+          `Для завершение заказа отправьте контакт`,
+          {
+            reply_markup: JSON.stringify({
+              keyboard: [
+                [{ text: "Отправить контакт", request_contact: true }],
+              ],
+              resize_keyboard: true,
+            }),
+          }
+        );
       }
     } catch (error) {
       console.log("error ->", error);
@@ -148,6 +153,7 @@ bot.on("location", async (msg) => {
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
   <b>Оплате (${data.payment}) </b>%0A
+  <b>Тип выдачи:</b> ${data.delivery} %0A
   <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b> %0A
   <b>Товары в корзине:</b> ${products.map((i, index) => {
     let text = ` %0A ${index + 1}. ${i.product_name} (${
