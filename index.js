@@ -172,10 +172,8 @@ bot.on("location", async (msg) => {
           %0A
   <b>Оплате (${data.payment}) </b>%0A
   <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b>
-  <b>Товары в корзине:</b> ${data.order_products.map((i, index) => {
-    let text = ` %0A ${index}. ${i.product_name} (${
-      i.sale_price !== null ? i.sale_price : i.price
-    } UZS  x${i.count})`;
+  <b>Товары в корзине:</b> ${products.map((i, index) => {
+    let text = ` %0A ${index}. ${i.product_name} (${i.product_price} UZS  x${i.count})`;
     return text;
   })} %0A
         `;
