@@ -112,6 +112,7 @@ bot.on("message", async (msg) => {
     }
   }
 });
+
 bot.on("contact", async (msg) => {
   const find = await client.query(
     "select * from users where phone_number = $1",
@@ -158,23 +159,30 @@ bot.on("location", async (msg) => {
     [location, msg.from.id]
   );
 
-  bot.sendMessage(
-    msg.chat.id,
-    `Отлично! Для выбора товара нажмите на кнопку "Меню"`,
-    {
-      reply_markup: JSON.stringify({
-        keyboard: [
-          [
-            {
-              text: `Меню`,
-              web_app: { url: "https://www.collagenbot.uz/" },
-            },
-          ],
-        ],
-        resize_keyboard: true,
-      }),
-    }
+  const getOrder = await client.query(
+    "SELECT * FROM orders WHERE user_id = $1",
+    [msg.from.id]
   );
+
+  console.log(getOrder);
+
+  // bot.sendMessage(
+  //   msg.chat.id,
+  //   `Отлично! Для выбора товара нажмите на кнопку "Меню"`,
+  //   {
+  //     reply_markup: JSON.stringify({
+  //       keyboard: [
+  //         [
+  //           {
+  //             text: `Меню`,
+  //             web_app: { url: "https://www.collagenbot.uz/" },
+  //           },
+  //         ],
+  //       ],
+  //       resize_keyboard: true,
+  //     }),
+  //   }
+  // );
 });
 
 app.use(productsRoute);
