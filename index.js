@@ -141,6 +141,7 @@ bot.on("location", async (msg) => {
   let products = data.products.map((i) => JSON.parse(i));
   let getCount = await client.query("SELECT MAX(count) FROM orders");
   console.log(getCount.rows[0].max);
+  console.log(data);
 
   const token = process.env.TelegramApi;
   const chat_id = process.env.CHAT_ID;
@@ -148,13 +149,13 @@ bot.on("location", async (msg) => {
     getCount.rows[0].max
   } %0A
   <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  <b>Номер:</b> ${"+" + user.rows[0].phone_number} | @${msg.from.username} %0A
-  <b>Сумма заказа:</b> ${(+data.total + 0).toLocaleString()} UZS %0A
+  <b>Номер:</b> ${"++" + user.rows[0].phone_number} | @${msg.from.username} %0A
+  <b>Сумма заказа:</b> ${data.total} UZS %0A
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
   <b>Оплате (${data.payment}) </b>%0A
   <b>Тип выдачи:</b> ${data.delivery} %0A
-  <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b> %0A
+  <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
   <b>Товары в корзине:</b> ${products.map((i, index) => {
     let text = ` %0A ${index + 1}. ${i.product_name} (${
       i.product_price
@@ -170,24 +171,24 @@ bot.on("location", async (msg) => {
     `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
   );
 
-  // bot.sendMessage(
-  //   msg.chat.id,
-  //   `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊
-  //    Для выбора товара нажмите на кнопку "Меню"`,
-  //   {
-  //     reply_markup: JSON.stringify({
-  //       keyboard: [
-  //         [
-  //           {
-  //             text: `Меню`,
-  //             web_app: { url: "https://www.collagenbot.uz/" },
-  //           },
-  //         ],
-  //       ],
-  //       resize_keyboard: true,
-  //     }),
-  //   }
-  // );
+  bot.sendMessage(
+    msg.chat.id,
+    `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊
+     Для выбора товара нажмите на кнопку "Меню"`,
+    {
+      reply_markup: JSON.stringify({
+        keyboard: [
+          [
+            {
+              text: `Меню`,
+              web_app: { url: "https://www.collagenbot.uz/" },
+            },
+          ],
+        ],
+        resize_keyboard: true,
+      }),
+    }
+  );
 });
 
 app.use(productsRoute);
