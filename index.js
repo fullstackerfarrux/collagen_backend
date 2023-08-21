@@ -100,6 +100,7 @@ bot.on("message", async (msg) => {
   if (msg.web_app_data?.data) {
     try {
       const data = JSON.parse(msg.web_app_data.data);
+      console.log(data);
       if (msg.web_app_data.data.length >= 0) {
         let resProduct = data.order_products.map((product) => {
           return {
