@@ -138,23 +138,22 @@ bot.on("location", async (msg) => {
   const token = process.env.TelegramApi;
   const chat_id = process.env.CHAT_ID;
   const message = `<b>Поступил заказ с Telegram бота:</b> ${
-    "#" + getCount.rows[0].max
+    getCount.rows[0].max
   } %0A
+  <b>Имя клиента:</b> ${msg.from.first_name} %0A
+  <b>Номер:</b> +${user.rows[0].phone_number} | @${msg.from.username} %0A
+  <b>Сумма заказа:</b> ${+data.total.toLocaleString()} UZS %0A
+  <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
+          %0A
+  <b>Оплате (${data.payment}) </b>%0A
+  <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b>
+  <b>Товары в корзине:</b> ${products.map((i, index) => {
+    let text = ` %0A ${index + 1}. ${i.product_name} (${
+      i.product_price
+    } UZS  x${i.count})`;
+    return text;
+  })} %0A
         `;
-
-  //         <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  // <b>Номер:</b> +${user.rows[0].phone_number} | @${msg.from.username} %0A
-  // <b>Сумма заказа:</b> ${+data.total.toLocaleString()} UZS %0A
-  // <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
-  //         %0A
-  // <b>Оплате (${data.payment}) </b>%0A
-  // <b>Комментарий: ${data.comment !== null ? data.comment : "Нет"}</b>
-  // <b>Товары в корзине:</b> ${products.map((i, index) => {
-  //   let text = ` %0A ${index + 1}. ${i.product_name} (${
-  //     i.product_price
-  //   } UZS  x${i.count})`;
-  //   return text;
-  // })} %0A
 
   console.log(message);
 
