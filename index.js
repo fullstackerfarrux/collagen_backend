@@ -133,6 +133,7 @@ bot.on("location", async (msg) => {
   let data = getOrder.rows[lastIndex - 1];
   let products = data.products.map((i) => JSON.parse(i));
   let getCount = await client.query("SELECT MAX(count) FROM orders");
+  console.log(getCount.rows[0].max);
 
   const token = process.env.TelegramApi;
   const chat_id = process.env.CHAT_ID;
