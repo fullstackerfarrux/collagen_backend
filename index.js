@@ -168,7 +168,7 @@ bot.on("location", async (msg) => {
         `;
 
   await axios.post(
-    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html=${message}`
+    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=markdown&text=${message}`
   );
   await axios.post(
     `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
