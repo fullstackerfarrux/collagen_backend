@@ -149,7 +149,7 @@ bot.on("location", async (msg) => {
     getCount.rows[0].max
   } %0A
   <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  <b>Номер:</b> +998903152006 | @${msg.from.username} %0A
+  <b>Номер:</b> <a href="tel:+998903152006">call to client</a> | @${msg.from.username} %0A
   <b>Сумма заказа:</b> ${data.total} UZS %0A
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
@@ -166,7 +166,7 @@ bot.on("location", async (msg) => {
         `;
 
   await axios.post(
-    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=Markdown=${message}`
+    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
   );
   await axios.post(
     `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
