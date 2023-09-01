@@ -189,28 +189,28 @@ bot.on("location", async (msg) => {
   await axios.post(
     `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
   );
-  // await axios.post(
-  //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
-  // );
+  await axios.post(
+    `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
+  );
 
-  // bot.sendMessage(
-  //   msg.chat.id,
-  //   `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊
-  //    Для выбора товара нажмите на кнопку "Меню"`,
-  //   {
-  //     reply_markup: JSON.stringify({
-  //       keyboard: [
-  //         [
-  //           {
-  //             text: `Меню`,
-  //             web_app: { url: "https://www.collagenbot.uz/" },
-  //           },
-  //         ],
-  //       ],
-  //       resize_keyboard: true,
-  //     }),
-  //   }
-  // );
+  bot.sendMessage(
+    msg.chat.id,
+    `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊
+     Для выбора товара нажмите на кнопку "Меню"`,
+    {
+      reply_markup: JSON.stringify({
+        keyboard: [
+          [
+            {
+              text: `Меню`,
+              web_app: { url: "https://www.collagenbot.uz/" },
+            },
+          ],
+        ],
+        resize_keyboard: true,
+      }),
+    }
+  );
 });
 
 app.use(productsRoute);
