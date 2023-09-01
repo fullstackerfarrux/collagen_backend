@@ -165,7 +165,7 @@ bot.on("location", async (msg) => {
     method: "POST",
     payload: {
       method: "sendMessage",
-      chat_id: chat_id,
+      chat_id: `${chat_id}`,
       text: "+something",
       parse_mode: "HTML",
     },
