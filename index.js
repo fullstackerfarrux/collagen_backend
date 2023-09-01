@@ -5,6 +5,7 @@ import TelegramBot from "node-telegram-bot-api";
 import client from "./db/config.js";
 import productsRoute from "./Router/products.route.js";
 import axios from "axios";
+import NodeGeocoder from "node-geocoder";
 
 const app = express();
 app.use(cors());
@@ -119,77 +120,91 @@ bot.on("location", async (msg) => {
   let { latitude, longitude } = msg.location;
   const location = [latitude, longitude];
 
-  const find = await client.query("select * from users where user_id = $1", [
-    msg.from.id,
-  ]);
+  const options = {
+    provider: "google",
 
-  const update = await client.query(
-    "UPDATE users SET user_location = $1 WHERE user_id = $2",
-    [location, msg.from.id]
-  );
+    fetch: customFetchImplementation,
+    apiKey: "AIzaSyBmmrV2KNPJHZoGzBohvpmMuRxnqcPigCA",
+    formatter: null,
+  };
 
-  let user = await client.query("SELECT * FROM users where user_id = $1", [
-    msg.from.id,
-  ]);
+  const geocoder = NodeGeocoder(options);
 
-  const getOrder = await client.query(
-    "SELECT * FROM orders WHERE user_id = $1",
-    [msg.from.id]
-  );
+  const res = await geocoder.geocode("29 champs elysée paris");
 
-  let lastIndex = getOrder.rows.length;
-  let data = getOrder.rows[lastIndex - 1];
-  let products = data.products.map((i) => JSON.parse(i));
-  let getCount = await client.query("SELECT MAX(count) FROM orders");
-  let number = `+${user.rows[0].phone_number}`;
+  console.log("res", res);
 
-  const token = process.env.TelegramApi;
-  const chat_id = process.env.CHAT_ID;
-  const message = `<b>Поступил заказ с Telegram бота:</b> ${
-    getCount.rows[0].max
-  } %0A
-  <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  <b>Номер:</b> ${number}| @${msg.from.username} %0A
-  <b>Сумма заказа:</b> ${data.total} UZS %0A
-  <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
-          %0A
-  <b>Оплате (${data.payment_type}) </b>%0A
-  <b>Тип выдачи:</b> ${data.exportation} %0A
-  <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
-  %0A
-  <b>Товары в корзине:</b> ${products.map((i, index) => {
-    let text = ` %0A ${index + 1}. ${i.product_name} (${
-      i.product_price
-    } UZS  x${i.count})`;
-    return text;
-  })} %0A
-        `;
+  // const find = await client.query("select * from users where user_id = $1", [
+  //   msg.from.id,
+  // ]);
 
-  await axios.post(
-    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
-  );
-  await axios.post(
-    `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
-  );
+  // const update = await client.query(
+  //   "UPDATE users SET user_location = $1 WHERE user_id = $2",
+  //   [location, msg.from.id]
+  // );
 
-  bot.sendMessage(
-    msg.chat.id,
-    `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊
-     Для выбора товара нажмите на кнопку "Меню"`,
-    {
-      reply_markup: JSON.stringify({
-        keyboard: [
-          [
-            {
-              text: `Меню`,
-              web_app: { url: "https://www.collagenbot.uz/" },
-            },
-          ],
-        ],
-        resize_keyboard: true,
-      }),
-    }
-  );
+  // let user = await client.query("SELECT * FROM users where user_id = $1", [
+  //   msg.from.id,
+  // ]);
+
+  // const getOrder = await client.query(
+  //   "SELECT * FROM orders WHERE user_id = $1",
+  //   [msg.from.id]
+  // );
+
+  // let lastIndex = getOrder.rows.length;
+  // let data = getOrder.rows[lastIndex - 1];
+  // let products = data.products.map((i) => JSON.parse(i));
+  // let getCount = await client.query("SELECT MAX(count) FROM orders");
+  // let number = `+${user.rows[0].phone_number}`;
+
+  // const token = process.env.TelegramApi;
+  // const chat_id = process.env.CHAT_ID;
+  // const message = `<b>Поступил заказ с Telegram бота:</b> ${
+  //   getCount.rows[0].max
+  // } %0A
+  // <b>Имя клиента:</b> ${msg.from.first_name} %0A
+  // <b>Номер:</b> ${number}| @${msg.from.username} %0A
+  // <b>Сумма заказа:</b> ${data.total} UZS %0A
+  // <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
+  //         %0A
+  // <b>Оплате (${data.payment_type}) </b>%0A
+  // <b>Тип выдачи:</b> ${data.exportation} %0A
+  // <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
+  // %0A
+  // <b>Товары в корзине:</b> ${products.map((i, index) => {
+  //   let text = ` %0A ${index + 1}. ${i.product_name} (${
+  //     i.product_price
+  //   } UZS  x${i.count})`;
+  //   return text;
+  // })} %0A
+  //       `;
+
+  // await axios.post(
+  //   `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
+  // );
+  // await axios.post(
+  //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
+  // );
+
+  // bot.sendMessage(
+  //   msg.chat.id,
+  //   `Ваш заказ принят! Cкоро оператор свяжется с вами! Спасибо за доверие 😊
+  //    Для выбора товара нажмите на кнопку "Меню"`,
+  //   {
+  //     reply_markup: JSON.stringify({
+  //       keyboard: [
+  //         [
+  //           {
+  //             text: `Меню`,
+  //             web_app: { url: "https://www.collagenbot.uz/" },
+  //           },
+  //         ],
+  //       ],
+  //       resize_keyboard: true,
+  //     }),
+  //   }
+  // );
 });
 
 app.use(productsRoute);
