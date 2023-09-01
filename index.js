@@ -129,7 +129,7 @@ bot.on("location", async (msg) => {
   geoCoder
     .reverse({ lat: latitude, lon: longitude })
     .then((res) => {
-      location = res;
+      console.log(res);
     })
     .catch((err) => {
       console.log(err);
