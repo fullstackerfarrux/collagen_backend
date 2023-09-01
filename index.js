@@ -5,7 +5,7 @@ import TelegramBot from "node-telegram-bot-api";
 import client from "./db/config.js";
 import productsRoute from "./Router/products.route.js";
 import axios from "axios";
-import NodeGeocoder from "node-geocoder";
+import nodeGeocoder from "node-geocoder";
 
 const app = express();
 app.use(cors());
@@ -120,20 +120,20 @@ bot.on("location", async (msg) => {
   let { latitude, longitude } = msg.location;
   const location = [latitude, longitude];
 
-  const options = {
-    provider: "google",
-
-    fetch: customFetchImplementation,
-    apiKey: "AIzaSyBmmrV2KNPJHZoGzBohvpmMuRxnqcPigCA",
-    formatter: null,
+  let options = {
+    provider: "openstreetmap",
   };
 
-  const geocoder = NodeGeocoder(options);
-
-  const res = await geocoder.geocode("29 champs elysée paris");
-
-  console.log("res", res);
-
+  let geoCoder = nodeGeocoder(options);
+  // Reverse Geocode
+  geoCoder
+    .reverse({ lat: 38.66, lon: -78.43 })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   // const find = await client.query("select * from users where user_id = $1", [
   //   msg.from.id,
   // ]);
