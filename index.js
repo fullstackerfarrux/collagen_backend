@@ -162,7 +162,7 @@ bot.on("location", async (msg) => {
   const token = process.env.TelegramApi;
   const chat_id = process.env.CHAT_ID;
   var sendOptions = {
-    method: "post",
+    method: "POST",
     payload: {
       method: "sendMessage",
       chat_id: chat_id,
