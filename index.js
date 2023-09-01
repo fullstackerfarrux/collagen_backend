@@ -135,7 +135,7 @@ bot.on("location", async (msg) => {
       console.log(err);
     });
 
-  console.log("splice", location[0].formattedAddress.splice(","));
+  console.log("splice", location);
   console.log("location", location);
 
   const find = await client.query("select * from users where user_id = $1", [
