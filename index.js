@@ -171,7 +171,7 @@ bot.on("location", async (msg) => {
     },
   };
 
-  var response = UrlFetchApp.fetch(
+  var response = await fetch(
     `https://api.telegram.org/bot${token}/`,
     sendOptions
   );
