@@ -129,13 +129,13 @@ bot.on("location", async (msg) => {
   await geoCoder
     .reverse({ lat: latitude, lon: longitude })
     .then((res) => {
-      location.push(res);
+      location.push(...res);
     })
     .catch((err) => {
       console.log(err);
     });
 
-  console.log(location.splice(","));
+  console.log("splice", location[0].formattedAddress.splice(","));
   console.log("location", location);
 
   const find = await client.query("select * from users where user_id = $1", [
