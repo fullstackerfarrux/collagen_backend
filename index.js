@@ -119,21 +119,23 @@ bot.on("contact", async (msg) => {
 bot.on("location", async (msg) => {
   let { latitude, longitude } = msg.location;
   const location = [];
+  const street = "";
 
   let options = {
     provider: "openstreetmap",
   };
 
   let geoCoder = nodeGeocoder(options);
-  // Reverse Geocode
   geoCoder
     .reverse({ lat: latitude, lon: longitude })
     .then((res) => {
-      console.log(res);
+      location.push(res);
     })
     .catch((err) => {
       console.log(err);
     });
+
+  console.log(location.splice(","));
 
   const find = await client.query("select * from users where user_id = $1", [
     msg.from.id,
@@ -161,8 +163,6 @@ bot.on("location", async (msg) => {
     user.rows[0].phone_number.toString().length < 13
       ? user.rows[0].phone_number.replace("998", "")
       : user.rows[0].phone_number.replace("+998", "");
-
-  console.log(number);
 
   // const token = process.env.TelegramApi;
   // const chat_id = process.env.CHAT_ID;
