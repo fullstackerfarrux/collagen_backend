@@ -119,7 +119,6 @@ bot.on("contact", async (msg) => {
 bot.on("location", async (msg) => {
   let { latitude, longitude } = msg.location;
   const location = [];
-  const street = "";
 
   let options = {
     provider: "openstreetmap",
@@ -134,9 +133,6 @@ bot.on("location", async (msg) => {
     .catch((err) => {
       console.log(err);
     });
-
-  console.log("splice", location);
-  console.log("location", location);
 
   const find = await client.query("select * from users where user_id = $1", [
     msg.from.id,
@@ -165,33 +161,34 @@ bot.on("location", async (msg) => {
       ? user.rows[0].phone_number.replace("998", "")
       : user.rows[0].phone_number.replace("+998", "");
 
-  // const token = process.env.TelegramApi;
-  // const chat_id = process.env.CHAT_ID;
-  // const message = `<b>Поступил заказ с Telegram бота:</b> ${
-  //   getCount.rows[0].max
-  // } %0A
-  // <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  // <b>Номер:</b> ${number} | @${msg.from.username} %0A
-  // <b>Сумма заказа:</b> ${data.total} UZS %0A
-  // <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
-  //         %0A
-  // <b>Оплате (${data.payment_type}) </b>%0A
-  // <b>Тип выдачи:</b> ${data.exportation} %0A
-  // <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
-  // %0A
-  // <b>Товары в корзине:</b> ${products.map((i, index) => {
-  //   let text = ` %0A ${index + 1}. ${i.product_name} (${
-  //     i.product_price
-  //   } UZS  x${i.count})`;
-  //   return text;
-  // })} %0A
-  //       `;
+  const token = process.env.TelegramApi;
+  const chat_id = process.env.CHAT_ID;
+  const message = `<b>Поступил заказ с Telegram бота:</b> ${
+    getCount.rows[0].max
+  } %0A
+  <b>Имя клиента:</b> ${msg.from.first_name} %0A
+  <b>Номер:</b> ${number} | @${msg.from.username} %0A
+  <b>Сумма заказа:</b> ${data.total} UZS %0A
+  <b>Адрес:</b> ${location[0].formattedAddress
+    .split(",")
+    .splice(0, location[0].formattedAddress.split(",").length - 3)
+    .toString()} [${latitude}, ${longitude} (Локация после сообщения)] %0A
+          %0A
+  <b>Оплате (${data.payment_type}) </b>%0A
+  <b>Тип выдачи:</b> ${data.exportation} %0A
+  <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
+  %0A
+  <b>Товары в корзине:</b> ${products.map((i, index) => {
+    let text = ` %0A ${index + 1}. ${i.product_name} (${
+      i.product_price
+    } UZS  x${i.count})`;
+    return text;
+  })} %0A
+        `;
 
-  // console.log(message);
-
-  // await axios.post(
-  //   `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
-  // );
+  await axios.post(
+    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
+  );
   // await axios.post(
   //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
   // );
