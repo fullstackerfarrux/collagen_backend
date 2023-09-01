@@ -157,7 +157,7 @@ bot.on("location", async (msg) => {
   let data = getOrder.rows[lastIndex - 1];
   let products = data.products.map((i) => JSON.parse(i));
   let getCount = await client.query("SELECT MAX(count) FROM orders");
-  let number = urlencoded(`+${user.rows[0].phone_number}`);
+  let number = `+${user.rows[0].phone_number}`;
 
   const token = process.env.TelegramApi;
   const chat_id = process.env.CHAT_ID;
@@ -165,7 +165,7 @@ bot.on("location", async (msg) => {
     getCount.rows[0].max
   } %0A
   <b>Имя клиента:</b> ${msg.from.first_name} %0A
-  <b>Номер:</b> ${number}| @${msg.from.username} %0A
+  <b>Номер:</b> ${urlencoded(number)}| @${msg.from.username} %0A
   <b>Сумма заказа:</b> ${data.total} UZS %0A
   <b>Адрес:</b> ${latitude}, ${longitude} (Локация после сообщения) %0A
           %0A
@@ -181,9 +181,11 @@ bot.on("location", async (msg) => {
   })} %0A
         `;
 
-  await axios.post(
-    `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
-  );
+  console.log(message);
+
+  // await axios.post(
+  //   `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
+  // );
   // await axios.post(
   //   `https://api.telegram.org/bot${token}/sendLocation?chat_id=${chat_id}&latitude=${latitude}&longitude=${longitude}`
   // );
