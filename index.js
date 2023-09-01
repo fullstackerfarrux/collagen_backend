@@ -176,6 +176,8 @@ bot.on("location", async (msg) => {
     sendOptions
   );
 
+  console.log(response);
+
   // const message = `<b>Поступил заказ с Telegram бота:</b> ${
   //   getCount.rows[0].max
   // } %0A
