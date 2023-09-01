@@ -118,7 +118,7 @@ bot.on("contact", async (msg) => {
 
 bot.on("location", async (msg) => {
   let { latitude, longitude } = msg.location;
-  const location = [latitude, longitude];
+  const location = [];
 
   let options = {
     provider: "openstreetmap",
@@ -129,36 +129,52 @@ bot.on("location", async (msg) => {
   geoCoder
     .reverse({ lat: latitude, lon: longitude })
     .then((res) => {
-      console.log(res);
+      location = res;
     })
     .catch((err) => {
       console.log(err);
     });
-  // const find = await client.query("select * from users where user_id = $1", [
-  //   msg.from.id,
-  // ]);
 
-  // const update = await client.query(
-  //   "UPDATE users SET user_location = $1 WHERE user_id = $2",
-  //   [location, msg.from.id]
-  // );
+  const find = await client.query("select * from users where user_id = $1", [
+    msg.from.id,
+  ]);
 
-  // let user = await client.query("SELECT * FROM users where user_id = $1", [
-  //   msg.from.id,
-  // ]);
+  const update = await client.query(
+    "UPDATE users SET user_location = $1 WHERE user_id = $2",
+    [location, msg.from.id]
+  );
 
-  // const getOrder = await client.query(
-  //   "SELECT * FROM orders WHERE user_id = $1",
-  //   [msg.from.id]
-  // );
+  let user = await client.query("SELECT * FROM users where user_id = $1", [
+    msg.from.id,
+  ]);
 
-  // let lastIndex = getOrder.rows.length;
-  // let data = getOrder.rows[lastIndex - 1];
-  // let products = data.products.map((i) => JSON.parse(i));
-  // let getCount = await client.query("SELECT MAX(count) FROM orders");
-  // let number = `+${user.rows[0].phone_number}`;
+  const getOrder = await client.query(
+    "SELECT * FROM orders WHERE user_id = $1",
+    [msg.from.id]
+  );
 
-  // const token = process.env.TelegramApi;
+  let lastIndex = getOrder.rows.length;
+  let data = getOrder.rows[lastIndex - 1];
+  let products = data.products.map((i) => JSON.parse(i));
+  let getCount = await client.query("SELECT MAX(count) FROM orders");
+  let number = `+${user.rows[0].phone_number}`;
+
+  const token = process.env.TelegramApi;
+  var sendOptions = {
+    method: "post",
+    payload: {
+      method: "sendMessage",
+      chat_id: "<chat_id_here>",
+      text: "+something",
+      parse_mode: "HTML",
+    },
+  };
+
+  var response = UrlFetchApp.fetch(
+    `https://api.telegram.org/bot${token}/`,
+    sendOptions
+  );
+
   // const chat_id = process.env.CHAT_ID;
   // const message = `<b>Поступил заказ с Telegram бота:</b> ${
   //   getCount.rows[0].max
