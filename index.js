@@ -160,11 +160,12 @@ bot.on("location", async (msg) => {
   let number = `+${user.rows[0].phone_number}`;
 
   const token = process.env.TelegramApi;
+  const chat_id = process.env.CHAT_ID;
   var sendOptions = {
     method: "post",
     payload: {
       method: "sendMessage",
-      chat_id: "<chat_id_here>",
+      chat_id: chat_id,
       text: "+something",
       parse_mode: "HTML",
     },
@@ -175,7 +176,6 @@ bot.on("location", async (msg) => {
     sendOptions
   );
 
-  // const chat_id = process.env.CHAT_ID;
   // const message = `<b>Поступил заказ с Telegram бота:</b> ${
   //   getCount.rows[0].max
   // } %0A
