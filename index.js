@@ -41,6 +41,8 @@ bot.on("message", async (msg) => {
   if (msg.web_app_data?.data) {
     try {
       const data = JSON.parse(msg.web_app_data.data);
+      console.log(data.order_products[0]);
+      console.log(product.sale_price !== null);
       if (msg.web_app_data.data.length >= 0) {
         let resProduct = data.order_products.map((product) => {
           return {
