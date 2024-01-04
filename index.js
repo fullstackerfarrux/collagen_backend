@@ -43,11 +43,16 @@ bot.on("message", async (msg) => {
       const data = JSON.parse(msg.web_app_data.data);
 
       if (msg.web_app_data.data.length >= 0) {
+        console.log(
+          data.order_products[0].sale_price !== "undefined"
+            ? product.sale_price
+            : product.price
+        );
         let resProduct = data.order_products.map((product) => {
           return {
             product_name: product.product_name,
             product_price:
-              product.sale_price !== undefined
+              product.sale_price !== "undefined"
                 ? product.sale_price
                 : product.price,
             count: product.count,
