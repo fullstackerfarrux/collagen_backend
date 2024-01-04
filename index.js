@@ -179,12 +179,13 @@ bot.on("location", async (msg) => {
   <b>Комментарий: ${data.comment !== null ? `${data.comment}` : "Нет"}</b> %0A
   %0A
   <b>Товары в корзине:</b> ${products.map((i, index) => {
-    let text = ` %0A ${index + 1}. ${i.product_name} (${
-      i.price
-    } UZS  x${i.count})`;
+    let text = ` %0A ${index + 1}. ${i.product_name} (${i.price} UZS  x${
+      i.count
+    })`;
     return text;
   })} %0A
         `;
+  console.log(products[0]);
 
   await axios.post(
     `https://api.telegram.org/bot${token}/sendMessage?chat_id=-1001918190466&parse_mode=html&text=${message}`
