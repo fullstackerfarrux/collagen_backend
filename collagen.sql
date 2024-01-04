@@ -38,5 +38,5 @@ create table orders(
 );
 
 
-INSERT INTO users(user_id, username, firstname, phone_number) values('farrux', 'fulstacker', '998903152006');
-INSERT INTO users(user_id, username, firstname, phone_number) values('komron', 'komron', '998942663122');
+INSERT INTO users(user_id, username, firstname, phone_number) values('609736291', 'farrux', 'fulstacker', '998903152006');
+INSERT INTO users(user_id, username, firstname, phone_number) values('1283327280', 'komron', 'komron', '998942663122');

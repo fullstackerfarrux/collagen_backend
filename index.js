@@ -180,7 +180,7 @@ bot.on("location", async (msg) => {
   %0A
   <b>Товары в корзине:</b> ${products.map((i, index) => {
     let text = ` %0A ${index + 1}. ${i.product_name} (${
-      i.product_price
+      i.price
     } UZS  x${i.count})`;
     return text;
   })} %0A
